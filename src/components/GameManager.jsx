@@ -1,4 +1,4 @@
-"use client";
+
 import { DndContext } from "@dnd-kit/core";
 import Deck from "@/components/Deck";
 import CardContainer from "@/components/CardContainer";

@@ -1,5 +1,3 @@
-"use client";
-
 import GameManager from "@/components/GameManager";
 import { Inter } from "next/font/google";
 
