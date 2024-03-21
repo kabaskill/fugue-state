@@ -51,29 +51,39 @@ export default function GameManager() {
   }, []);
 
   function handleDragEnd(event) {
-    if (event.over && event.over.id === "droppable-area") {
-      const draggedCardIndex = containerCards.findIndex((card) => card.id === event.active.id);
-      const draggedCard = containerCards[draggedCardIndex];
-      const firstCardOnDeck = deck[0];
+    const { active, over } = event;
 
-      setNoteString(noteString + draggedCard.value);
-
-      containerCards.splice(draggedCardIndex, 1);
-      deck.splice(0, 1);
-
-      setDeck([...deck, draggedCard]);
-      setContainerCards([...containerCards, firstCardOnDeck]);
+    if (!over) {
+      return;
     }
 
-    const { active, over } = event;
-    // if (active.id === over.id) {
-    //   return;
-    // }
-    setContainerCards((cards) => {
-      const oldIndex = containerCards.findIndex((card) => card.id === active.id);
-      const newIndex = containerCards.findIndex((card) => card.id === over.id);
-      return arrayMove(containerCards, oldIndex, newIndex);
-    });
+    if (active.id === over.id) {
+      return;
+    }
+
+    if (over.id === "droppable-area") {
+      const draggedCard = containerCards.find((card) => card.id === active.id);
+
+      if (draggedCard) {
+        const draggedCardIndex = containerCards.findIndex((card) => card.id === event.active.id);
+        const draggedCard = containerCards[draggedCardIndex];
+        const firstCardOnDeck = deck[0];
+  
+        setNoteString(noteString + draggedCard.value);
+  
+        containerCards.splice(draggedCardIndex, 1);
+        deck.splice(0, 1);
+  
+        setDeck([...deck, draggedCard]);
+        setContainerCards([...containerCards, firstCardOnDeck]);
+      }
+    } else {
+      setContainerCards((cards) => {
+        const oldIndex = cards.findIndex((card) => card.id === active.id);
+        const newIndex = cards.findIndex((card) => card.id === over.id);
+        return arrayMove(cards, oldIndex, newIndex);
+      });
+    }
   }
 
   return (
