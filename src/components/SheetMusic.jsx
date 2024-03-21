@@ -6,6 +6,8 @@ const SheetMusic = ({ id, notation }) => {
     abcjs.renderAbc(id, notation, { selectionColor: "#000" });
   }, [notation]);
 
+  
+
   return <div id={id}></div>;
 };
 

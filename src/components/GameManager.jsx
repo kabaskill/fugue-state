@@ -1,12 +1,18 @@
-
-import { DndContext } from "@dnd-kit/core";
+import { closestCenter, DndContext } from "@dnd-kit/core";
 import Deck from "@/components/Deck";
 import CardContainer from "@/components/CardContainer";
 import DroppableArea from "@/components/DroppableArea";
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { useState, useEffect } from "react";
 import SheetMusic from "./SheetMusic";
+import Card from "./Card";
 
-function GameManager() {
+export default function GameManager() {
   const initialDeck = [
     { name: "Card1", id: "0001", value: "C" },
     { name: "Card2", id: "0002", value: "D" },
@@ -54,22 +60,39 @@ function GameManager() {
 
       containerCards.splice(draggedCardIndex, 1);
       deck.splice(0, 1);
+
       setDeck([...deck, draggedCard]);
       setContainerCards([...containerCards, firstCardOnDeck]);
     }
+
+    const { active, over } = event;
+    // if (active.id === over.id) {
+    //   return;
+    // }
+    setContainerCards((cards) => {
+      const oldIndex = containerCards.findIndex((card) => card.id === active.id);
+      const newIndex = containerCards.findIndex((card) => card.id === over.id);
+      return arrayMove(containerCards, oldIndex, newIndex);
+    });
   }
 
   return (
     <>
-      <div  className="w-[1000px]  bg-slate-200 flex justify-center">
+      <div className="w-3/5 bg-slate-200 flex justify-center">
         <SheetMusic id="core-gameplay" notation={noteString} />
       </div>
 
-      <DndContext onDragEnd={handleDragEnd}>
+      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <div className="flex items-center justify-center p-4">
           <DroppableArea />
 
-          <CardContainer cards={containerCards} />
+          <SortableContext items={containerCards} strategy={verticalListSortingStrategy}>
+            <div className="flex gap-4">
+              {containerCards.map((card) => (
+                <Card key={card.id} card={card} />
+              ))}
+            </div>
+          </SortableContext>
 
           <Deck cards={deck} />
         </div>
@@ -77,5 +100,3 @@ function GameManager() {
     </>
   );
 }
-
-export default GameManager;

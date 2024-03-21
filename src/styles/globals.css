@@ -4,6 +4,7 @@
 
 :root {
   --foreground-rgb: 30, 30, 30;
+  --foreground-rgb-light: 230, 230, 30;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 180, 180, 210;
 }
@@ -11,6 +12,8 @@
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-end-rgb));
+  /* background: no-repeat url("../../public/placeholders/background.png"); */
+  background-size: cover;
 }
 
 @layer utilities {
