@@ -37,7 +37,7 @@ export default function GameManager() {
   const [noteString, setNoteString] = useState("X:1\nT:Core Gameplay\nK:C\nM:4/4\nL:1/4\nC");
 
   useEffect(() => {
-    const numberOfCards = 5;
+    const numberOfCards = 6;
     const initialContainerCards = [];
     const newDeck = [...deck];
 
