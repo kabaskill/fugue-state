@@ -2,15 +2,9 @@ import { closestCenter, DndContext } from "@dnd-kit/core";
 import Deck from "@/components/Deck";
 import CardContainer from "@/components/CardContainer";
 import DroppableArea from "@/components/DroppableArea";
-import {
-  arrayMove,
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { arrayMove, horizontalListSortingStrategy, SortableContext } from "@dnd-kit/sortable";
 import { useState, useEffect } from "react";
 import SheetMusic from "./SheetMusic";
-import Card from "./Card";
 
 export default function GameManager() {
   const initialDeck = [
@@ -37,7 +31,7 @@ export default function GameManager() {
   const [noteString, setNoteString] = useState("X:1\nT:Core Gameplay\nK:C\nM:4/4\nL:1/4\nC");
 
   useEffect(() => {
-    const numberOfCards = 6;
+    const numberOfCards = 5;
     const initialContainerCards = [];
     const newDeck = [...deck];
 
@@ -96,12 +90,8 @@ export default function GameManager() {
         <div className="flex items-center justify-center p-4">
           <DroppableArea />
 
-          <SortableContext items={containerCards} strategy={verticalListSortingStrategy}>
-            <div className="flex gap-4">
-              {containerCards.map((card) => (
-                <Card key={card.id} card={card} />
-              ))}
-            </div>
+          <SortableContext items={containerCards} strategy={horizontalListSortingStrategy}>
+            <CardContainer cards={containerCards} />
           </SortableContext>
 
           <Deck cards={deck} />
