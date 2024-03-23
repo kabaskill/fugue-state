@@ -8,27 +8,27 @@ const Card = ({ card, children }) => {
     id: card.id,
   });
 
+  const style = { transition, transform: CSS.Transform.toString(transform) };
+
   const cardNote = "L:1/4\n" + card.value;
   const noteId = "card-note" + card.id + card.value;
 
   return (
     <button
       ref={setNodeRef}
-      style={{
-        transform: isDragging ? CSS.Translate.toString(transform) : "none",
-        transition,
-      }}
+      style={style}
       {...attributes}
       {...listeners}
       className="relative p-2 cursor-pointer h-[280px] w-[200px] bg-slate-500 flex flex-col items-center gap-8"
     >
-      {/* <Image
+      <Image
         src="/placeholders/old-paper.png"
         alt="note-image"
-        className="absolute -z-10 top-0 left-0 w-full h-full"
+        className="absolute z-10 top-0 left-0 w-full h-full"
         width={512}
         height={512}
-      /> */}
+      />
+
       <div className=" w-3/4 h-1/3 ">
         <SheetMusic id={noteId} notation={cardNote} />
       </div>

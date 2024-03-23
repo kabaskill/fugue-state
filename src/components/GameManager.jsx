@@ -68,12 +68,12 @@ export default function GameManager() {
         const draggedCardIndex = containerCards.findIndex((card) => card.id === event.active.id);
         const draggedCard = containerCards[draggedCardIndex];
         const firstCardOnDeck = deck[0];
-  
+
         setNoteString(noteString + draggedCard.value);
-  
+
         containerCards.splice(draggedCardIndex, 1);
         deck.splice(0, 1);
-  
+
         setDeck([...deck, draggedCard]);
         setContainerCards([...containerCards, firstCardOnDeck]);
       }
