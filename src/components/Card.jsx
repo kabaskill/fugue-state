@@ -2,7 +2,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import SheetMusic from "./SheetMusic";
 
-const Card = ({ card }) => {
+const Card = ({ card, idSuffix = "" }) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: card.id,
   });
@@ -10,11 +10,12 @@ const Card = ({ card }) => {
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
-    zIndex: isDragging ? 1000 : undefined
+    zIndex: isDragging ? 1000 : undefined,
+    opacity: isDragging ? 0.5 : undefined,
   };
 
   const cardNote = "L:1/4\n" + card.value;
-  const noteId = "card-note" + card.id + card.value;
+  const noteId = "card-note" + card.id + card.value + idSuffix;
 
   return (
     <button
@@ -22,9 +23,9 @@ const Card = ({ card }) => {
       style={style}
       {...attributes}
       {...listeners}
-      className="relative p-2 cursor-pointer h-[250px] w-[200px] bg-card-bg bg-contain flex flex-col items-center justify-center "
+      className="relative p-2 cursor-pointer w-[20dvh] h-[25dvh] bg-card-bg bg-contain flex flex-col items-center justify-around hover:scale-110 "
     >
-      <div className=" w-3/4 h-1/3 ">
+      <div className=" w-1/2 h-1/3 ">
         <SheetMusic id={noteId} notation={cardNote} />
       </div>
       <p className="text-2xl">{card.value}</p>

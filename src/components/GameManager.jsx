@@ -1,8 +1,9 @@
-import { closestCenter, DndContext } from "@dnd-kit/core";
+import { DndContext, DragOverlay, pointerWithin } from "@dnd-kit/core";
+import { arrayMove, horizontalListSortingStrategy, SortableContext } from "@dnd-kit/sortable";
+import Card from "@/components/Card";
 import Deck from "@/components/Deck";
 import CardContainer from "@/components/CardContainer";
 import DroppableArea from "@/components/DroppableArea";
-import { arrayMove, horizontalListSortingStrategy, SortableContext } from "@dnd-kit/sortable";
 import { useState, useEffect } from "react";
 import SheetMusic from "./SheetMusic";
 
@@ -25,10 +26,12 @@ export default function GameManager() {
   ];
 
   const [deck, setDeck] = useState(initialDeck);
-
   const [containerCards, setContainerCards] = useState([]);
 
   const [noteString, setNoteString] = useState("X:1\nT:Core Gameplay\nK:C\nM:4/4\nL:1/4\nC");
+
+  const [activeId, setActiveId] = useState(null);
+  const activeCard = containerCards.find((card) => card.id === activeId);
 
   useEffect(() => {
     const numberOfCards = 5;
@@ -55,7 +58,7 @@ export default function GameManager() {
       return;
     }
 
-    if (over.id === "droppable-area") {
+    if (over && over.id === "droppable-area") {
       const draggedCard = containerCards.find((card) => card.id === active.id);
 
       if (draggedCard) {
@@ -82,17 +85,25 @@ export default function GameManager() {
 
   return (
     <>
-      <div className="w-3/5 bg-slate-200 flex justify-center">
-        <SheetMusic id="core-gameplay" notation={noteString} />
-      </div>
+      <DndContext
+        collisionDetection={pointerWithin}
+        onDragStart={({ active }) => setActiveId(active.id)}
+        onDragEnd={handleDragEnd}
+      >
+        <div className="w-3/5 bg-slate-200 flex justify-center">
+          <SheetMusic id="core-gameplay" notation={noteString} />
+        </div>
 
-      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <div className="flex items-center justify-center p-4">
           <DroppableArea />
 
           <SortableContext items={containerCards} strategy={horizontalListSortingStrategy}>
             <CardContainer cards={containerCards} />
           </SortableContext>
+
+          <DragOverlay>
+            {activeCard ? <Card card={activeCard} idSuffix="-clone" /> : null}
+          </DragOverlay>
 
           <Deck cards={deck} />
         </div>
